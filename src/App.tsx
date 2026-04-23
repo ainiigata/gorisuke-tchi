@@ -16,8 +16,8 @@ export default function App() {
             <Route path="/brain" element={<BrainPage />} />
             <Route path="/museum" element={<MuseumPage />} />
           </Routes>
+          <BottomNav />
         </div>
-        <BottomNav />
       </div>
     </BrowserRouter>
   )
