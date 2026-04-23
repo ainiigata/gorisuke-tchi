@@ -22,7 +22,7 @@ export function GorisukeSprite({ stage, isDead, size = 128 }: Props) {
     >
       {rects.map((r, i) => (
         <rect
-          key={i}
+          key={`${r.x}-${r.y}-${r.fill}`}
           x={r.x}
           y={r.y}
           width={r.w}
