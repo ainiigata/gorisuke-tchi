@@ -13,13 +13,16 @@ export interface Gorilla {
   lastActiveAt: number
 }
 
+export type DayOfWeek = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'
+
 export interface Routine {
   id: string
   title: string
   category: 'exercise' | 'study' | 'food' | 'rest' | 'custom'
   customCategoryName?: string
-  days: ('mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')[]
+  days: DayOfWeek[]
   timeType: 'exact' | 'zone' | 'anytime'
+  // timeType === 'exact' のとき time は必須、timeType === 'zone' のとき zone は必須
   time?: string
   zone?: 'morning' | 'afternoon' | 'evening'
   expReward: number
@@ -44,7 +47,7 @@ export interface MuseumEntry {
   totalRoutinesCompleted: number
   longestStreak: number
   finalStage: number
-  evolutionType: string | null
+  evolutionType: EvolutionType | null
 }
 
 export type EvolutionType = 'muscle' | 'scholar' | 'gourmet' | 'zen' | 'balanced'
