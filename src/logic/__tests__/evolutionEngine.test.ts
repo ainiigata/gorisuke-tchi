@@ -48,9 +48,17 @@ describe('determineEvolutionType', () => {
 })
 
 describe('calcExpReward', () => {
-  it('returns expReward from 10-30', () => {
-    const r = calcExpReward('exercise')
-    expect(r).toBeGreaterThanOrEqual(10)
-    expect(r).toBeLessThanOrEqual(30)
+  it('returns 20 for exercise', () => {
+    expect(calcExpReward('exercise')).toBe(20)
+  })
+  it('returns 10 for custom', () => {
+    expect(calcExpReward('custom')).toBe(10)
+  })
+  it('returns value in 10-20 range for any category', () => {
+    const categories = ['exercise', 'study', 'food', 'rest', 'custom'] as const
+    categories.forEach(c => {
+      expect(calcExpReward(c)).toBeGreaterThanOrEqual(10)
+      expect(calcExpReward(c)).toBeLessThanOrEqual(20)
+    })
   })
 })

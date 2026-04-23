@@ -1,6 +1,8 @@
 import type { EvolutionType } from '../types'
 
-export const EXP_THRESHOLDS = [0, 80, 240, 480, 800, 1200, 1700, 2400]
+export const EXP_THRESHOLDS = [0, 80, 240, 480, 800, 1200, 1700, 2400] as const
+
+type RoutineCategory = 'exercise' | 'study' | 'food' | 'rest' | 'custom'
 
 export function getStageForExp(exp: number): number {
   for (let i = EXP_THRESHOLDS.length - 1; i >= 0; i--) {
@@ -28,13 +30,13 @@ export function determineEvolutionType(counts: {
   return map[key]
 }
 
-export function calcExpReward(category: string): number {
-  const base: Record<string, number> = {
+export function calcExpReward(category: RoutineCategory): number {
+  const base: Record<RoutineCategory, number> = {
     exercise: 20,
     study: 20,
     food: 15,
     rest: 15,
     custom: 10,
   }
-  return base[category] ?? 10
+  return base[category]
 }
