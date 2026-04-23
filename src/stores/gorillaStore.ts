@@ -66,6 +66,7 @@ export const useGorillaStore = create<GorillaState>()(
             elapsed,
           )
           if (hp <= 0) {
+            // ネグレクト死は外部から killGorilla('neglect') で実行（MainPage の日次評価ロジック）
             return { gorilla: { ...g, hp: 0, hunger, diedAt: Date.now(), causeOfDeath: 'hunger' as const, lastActiveAt: Date.now() } }
           }
           return { gorilla: { ...g, hp, hunger, lastActiveAt: Date.now() } }

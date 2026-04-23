@@ -7,32 +7,38 @@ export type GameId =
   | 'numberSequence' | 'kanjiPuzzle'
   | 'calcChain' | 'memoryCard'
 
+const ALL_GAME_IDS: GameId[] = [
+  'arithmetic', 'colorRecognition',
+  'memoryFlash', 'reactionSpeed',
+  'numberSequence', 'kanjiPuzzle',
+  'calcChain', 'memoryCard',
+]
+
+const DEFAULT_PLAY_COUNT = Object.fromEntries(
+  ALL_GAME_IDS.map(id => [id, 0])
+) as Record<GameId, number>
+
 interface BrainState {
   playCount: Record<GameId, number>
   incrementPlay: (id: GameId) => void
   getUnlockedGames: (stage: number) => GameId[]
 }
 
-const UNLOCK_MAP: Record<number, GameId[]> = {
-  0: ['arithmetic', 'colorRecognition'],
-  2: ['memoryFlash', 'reactionSpeed'],
-  4: ['numberSequence', 'kanjiPuzzle'],
-  6: ['calcChain', 'memoryCard'],
-}
+const UNLOCK_TIERS: { minStage: number; games: GameId[] }[] = [
+  { minStage: 0, games: ['arithmetic', 'colorRecognition'] },
+  { minStage: 2, games: ['memoryFlash', 'reactionSpeed'] },
+  { minStage: 4, games: ['numberSequence', 'kanjiPuzzle'] },
+  { minStage: 6, games: ['calcChain', 'memoryCard'] },
+]
 
 export const useBrainStore = create<BrainState>()(
   persist(
-    (set, get) => ({
-      playCount: {} as Record<GameId, number>,
+    (set) => ({
+      playCount: { ...DEFAULT_PLAY_COUNT },
       incrementPlay: (id) =>
         set(s => ({ playCount: { ...s.playCount, [id]: (s.playCount[id] ?? 0) + 1 } })),
-      getUnlockedGames: (stage) => {
-        const games: GameId[] = []
-        for (const [minStage, ids] of Object.entries(UNLOCK_MAP)) {
-          if (stage >= Number(minStage)) games.push(...ids)
-        }
-        return games
-      },
+      getUnlockedGames: (stage) =>
+        UNLOCK_TIERS.filter(t => stage >= t.minStage).flatMap(t => t.games),
     }),
     { name: 'gorisuke-brain' },
   ),
