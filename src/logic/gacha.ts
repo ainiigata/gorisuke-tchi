@@ -14,11 +14,11 @@ export const FEED_TABLE: FeedTemplate[] = [
 ]
 
 export function rollGacha(): FeedItem {
-  const r = Math.random()
+  const rarityRoll = Math.random()
   let pool: FeedTemplate[]
-  if (r < 0.70) {
+  if (rarityRoll < 0.70) {
     pool = FEED_TABLE.filter(f => f.rarity === 'common')
-  } else if (r < 0.95) {
+  } else if (rarityRoll < 0.95) {
     pool = FEED_TABLE.filter(f => f.rarity === 'rare')
   } else {
     pool = FEED_TABLE.filter(f => f.rarity === 'legendary')

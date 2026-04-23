@@ -22,6 +22,12 @@ describe('rollGacha', () => {
     expect(item.rarity).toBe('rare')
     vi.restoreAllMocks()
   })
+  it('returns rare at upper boundary (0.94)', () => {
+    vi.spyOn(Math, 'random').mockReturnValueOnce(0.94).mockReturnValueOnce(0)
+    const item = rollGacha()
+    expect(item.rarity).toBe('rare')
+    vi.restoreAllMocks()
+  })
   it('returns legendary when random >= 0.95', () => {
     vi.spyOn(Math, 'random').mockReturnValueOnce(0.96).mockReturnValueOnce(0)
     const item = rollGacha()
