@@ -20,7 +20,7 @@ export function GorisukeSprite({ stage, isDead, size = 128 }: Props) {
       shapeRendering="crispEdges"
       aria-label="ゴリスケっち"
     >
-      {rects.map((r, i) => (
+      {rects.map((r) => (
         <rect
           key={`${r.x}-${r.y}-${r.fill}`}
           x={r.x}
