@@ -27,6 +27,9 @@ describe('calcHpDelta', () => {
   it('returns -20 when rate = 0 regardless of streak', () => {
     expect(calcHpDelta(0, 5)).toBe(-20)
   })
+  it('returns 0 when rate is exactly 0.5', () => {
+    expect(calcHpDelta(0.5, 3)).toBe(0)
+  })
 })
 
 describe('applyHealthTick', () => {

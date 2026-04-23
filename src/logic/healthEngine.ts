@@ -13,12 +13,12 @@ export function applyHealthTick(
   current: { hp: number; hunger: number },
   hpDelta: number,
   hungerDelta: number,
-  elapsedSecondsForHungerHpDrain = 0,
-): { hp: number; hunger: number } {
+  elapsedSeconds = 0,  // パラメータ名を短縮（elapsedSecondsForHungerHpDrain → elapsedSeconds）
+): { hp: number; hunger: number } {  // 戻り値型を明示
   const newHunger = Math.min(100, Math.max(0, current.hunger + hungerDelta))
   let hpFromHunger = 0
   if (current.hunger === 0) {
-    hpFromHunger = -Math.floor(elapsedSecondsForHungerHpDrain / 3600) * 5
+    hpFromHunger = -Math.floor(elapsedSeconds / 3600) * 5
   }
   const newHp = Math.min(100, Math.max(0, current.hp + hpDelta + hpFromHunger))
   return { hp: newHp, hunger: newHunger }
