@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { soundEngine } from '../logic/soundEngine'
+import { NumPad } from '../components/NumPad'
 
 interface Props {
   onComplete: (perfect: boolean) => void
@@ -26,6 +27,7 @@ export function Arithmetic({ onComplete }: Props) {
   const ROUNDS = 5
 
   function submit() {
+    if (!input || input === '-') return
     if (Number(input) === q.answer) {
       soundEngine.playSFX('correct')
       setFeedback('correct')
@@ -56,14 +58,8 @@ export function Arithmetic({ onComplete }: Props) {
           {feedback === 'correct' ? '✓ 正解!' : '✗ 不正解'}
         </p>
       )}
-      <input
-        type="number"
-        className="bg-white/10 rounded-lg px-4 py-3 text-white text-2xl text-center w-32"
-        value={input}
-        onChange={e => setInput(e.target.value)}
-        onKeyDown={e => e.key === 'Enter' && submit()}
-        autoFocus
-      />
+      <p className="text-3xl font-mono text-white min-h-10">{input || <span className="text-white/20">?</span>}</p>
+      <NumPad value={input} onChange={setInput} allowNegative />
       <button
         className="px-8 py-3 bg-accent/30 text-accent rounded-full font-mono"
         onClick={submit}

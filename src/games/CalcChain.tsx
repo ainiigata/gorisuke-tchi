@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { soundEngine } from '../logic/soundEngine'
+import { NumPad } from '../components/NumPad'
 
 interface Props {
   onComplete: (perfect: boolean) => void
@@ -22,6 +23,7 @@ export function CalcChain({ onComplete }: Props) {
   const ROUNDS = 5
 
   function submit() {
+    if (!input) return
     const correct = Number(input) === q.answer
     if (!correct) perfectRef.current = false
     soundEngine.playSFX(correct ? 'correct' : 'wrong')
@@ -37,16 +39,16 @@ export function CalcChain({ onComplete }: Props) {
     <div className="flex flex-col items-center gap-6 p-6">
       <p className="text-white/40 text-xs">{round + 1} / {ROUNDS}</p>
       <p className="text-3xl font-mono text-white">{q.question}</p>
-      {feedback !== null && <p className={feedback ? 'text-green-400' : 'text-red-400'}>{feedback ? '✓' : `✗ 正解: ${q.answer}`}</p>}
-      <input
-        type="number"
-        className="bg-white/10 rounded-lg px-4 py-3 text-white text-2xl text-center w-32"
-        value={input}
-        onChange={e => setInput(e.target.value)}
-        onKeyDown={e => e.key === 'Enter' && submit()}
-        autoFocus
-      />
-      <button className="px-8 py-3 bg-accent/30 text-accent rounded-full" onClick={submit}>答える</button>
+      {feedback !== null && (
+        <p className={feedback ? 'text-green-400' : 'text-red-400'}>
+          {feedback ? '✓ 正解!' : `✗ 正解: ${q.answer}`}
+        </p>
+      )}
+      <p className="text-3xl font-mono text-white min-h-10">{input || <span className="text-white/20">?</span>}</p>
+      <NumPad value={input} onChange={setInput} />
+      <button className="px-8 py-3 bg-accent/30 text-accent rounded-full" onClick={submit}>
+        答える
+      </button>
     </div>
   )
 }
