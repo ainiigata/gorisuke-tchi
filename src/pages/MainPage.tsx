@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { GorisukeSprite } from '../components/GorisukeSprite'
 import { LevelUpModal } from '../components/LevelUpModal'
+import { FarewellEnding } from '../components/FarewellEnding'
 import { StatusBars } from '../components/StatusBars'
 import { RoutineItem } from '../components/RoutineItem'
 import { useGorillaStore } from '../stores/gorillaStore'
@@ -50,6 +51,7 @@ export function MainPage() {
   const { entries, addEntry } = useMuseumStore()
   const [nameInput, setNameInput] = useState('')
   const [levelUpStage, setLevelUpStage] = useState<number | null>(null)
+  const [showFarewell, setShowFarewell] = useState(false)
   const prevStageRef = useRef<number | undefined>(undefined)
   const prevDiedAtRef = useRef<number | null>(null)
 
@@ -136,8 +138,28 @@ export function MainPage() {
   const stageName = STAGE_NAMES[Math.min(gorilla.stage, STAGE_NAMES.length - 1)]
   const spriteSize = STAGE_SIZES[Math.min(gorilla.stage, STAGE_SIZES.length - 1)]
 
+  const totalRoutinesCompleted = logs.reduce((sum, l) => sum + l.completedIds.length, 0)
+
   return (
     <>
+    {showFarewell && (
+      <FarewellEnding
+        gorilla={gorilla}
+        totalRoutines={totalRoutinesCompleted}
+        longestStreak={getStreakDays(today)}
+        onComplete={() => {
+          addEntry({
+            gorilla,
+            totalRoutinesCompleted,
+            longestStreak: getStreakDays(today),
+            finalStage: gorilla.stage,
+            evolutionType: gorilla.evolutionType,
+          })
+          setShowFarewell(false)
+          setNameInput('')
+        }}
+      />
+    )}
     {levelUpStage !== null && (
       <LevelUpModal stage={levelUpStage} onClose={() => setLevelUpStage(null)} />
     )}
@@ -178,6 +200,15 @@ export function MainPage() {
             </button>
           ))}
         </div>
+      )}
+
+      {gorilla.stage >= 7 && (
+        <button
+          className="w-full py-3 rounded-xl border border-yellow-400/30 bg-yellow-400/10 text-yellow-300 text-sm font-mono"
+          onClick={() => setShowFarewell(true)}
+        >
+          👑 大ゴリ王のお別れ
+        </button>
       )}
 
       <div>
