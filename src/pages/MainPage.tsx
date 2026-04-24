@@ -45,7 +45,7 @@ function getRangeStatus(timeFrom: string, timeTo: string): RangeStatus {
 }
 
 export function MainPage() {
-  const { gorilla, hatchEgg, feedGorilla, tick, addExp } = useGorillaStore()
+  const { gorilla, hatchEgg, feedGorilla, tick, addExp, retireGorilla } = useGorillaStore()
   const { routines, completeRoutine, getTodayLog, logs, getStreakDays } = useRoutineStore()
   const { stock, useFeed } = useFeedStore()
   const { entries, addEntry } = useMuseumStore()
@@ -157,6 +157,7 @@ export function MainPage() {
           })
           setShowFarewell(false)
           setNameInput('')
+          retireGorilla()
         }}
       />
     )}

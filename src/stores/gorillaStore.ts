@@ -12,6 +12,7 @@ interface GorillaState {
   killGorilla: (cause: 'neglect' | 'hunger') => void
   updateEvolutionType: (counts: { exercise: number; study: number; food: number; rest: number }) => void
   addExp: (amount: number) => void
+  retireGorilla: () => void
 }
 
 function newGorilla(name: string, generation: number): Gorilla {
@@ -74,6 +75,7 @@ export const useGorillaStore = create<GorillaState>()(
           if (!s.gorilla) return s
           return { gorilla: { ...s.gorilla, hp: 0, diedAt: Date.now(), causeOfDeath: cause } }
         }),
+      retireGorilla: () => set({ gorilla: null }),
       updateEvolutionType: (counts) =>
         set(s => {
           if (!s.gorilla) return s
