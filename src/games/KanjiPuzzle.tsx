@@ -6,34 +6,42 @@ interface Props {
 }
 
 const PAIRS = [
-  // 小学低学年
-  { kanji: '山', reading: 'やま' },   { kanji: '川', reading: 'かわ' },
-  { kanji: '木', reading: 'き' },     { kanji: '火', reading: 'ひ' },
-  { kanji: '水', reading: 'みず' },   { kanji: '月', reading: 'つき' },
-  { kanji: '日', reading: 'ひ' },     { kanji: '年', reading: 'とし' },
-  // 小学中学年
-  { kanji: '金', reading: 'きん' },   { kanji: '土', reading: 'つち' },
-  { kanji: '空', reading: 'そら' },   { kanji: '海', reading: 'うみ' },
-  { kanji: '花', reading: 'はな' },   { kanji: '草', reading: 'くさ' },
-  { kanji: '石', reading: 'いし' },   { kanji: '虫', reading: 'むし' },
-  { kanji: '鳥', reading: 'とり' },   { kanji: '魚', reading: 'さかな' },
-  // 小学高学年〜中学（紛らわしい音訓）
-  { kanji: '明', reading: 'あかるい' }, { kanji: '安', reading: 'やすい' },
-  { kanji: '強', reading: 'つよい' },  { kanji: '弱', reading: 'よわい' },
-  { kanji: '重', reading: 'おもい' },  { kanji: '軽', reading: 'かるい' },
-  { kanji: '深', reading: 'ふかい' },  { kanji: '浅', reading: 'あさい' },
-  { kanji: '広', reading: 'ひろい' },  { kanji: '狭', reading: 'せまい' },
-  { kanji: '速', reading: 'はやい' },  { kanji: '遅', reading: 'おそい' },
-  { kanji: '暑', reading: 'あつい' },  { kanji: '寒', reading: 'さむい' },
-  { kanji: '若', reading: 'わかい' },  { kanji: '老', reading: 'おいる' },
+  // 高校レベル訓読み
+  { kanji: '憂', reading: 'うれえる' },  { kanji: '慌', reading: 'あわてる' },
+  { kanji: '惜', reading: 'おしむ' },    { kanji: '悔', reading: 'くやむ' },
+  { kanji: '妬', reading: 'ねたむ' },    { kanji: '羨', reading: 'うらやむ' },
+  { kanji: '慕', reading: 'したう' },    { kanji: '蔑', reading: 'さげすむ' },
+  { kanji: '凌', reading: 'しのぐ' },    { kanji: '抗', reading: 'あらがう' },
+  { kanji: '覆', reading: 'くつがえす' }, { kanji: '覗', reading: 'のぞく' },
+  { kanji: '潜', reading: 'ひそむ' },    { kanji: '漂', reading: 'ただよう' },
+  { kanji: '滲', reading: 'にじむ' },    { kanji: '霞', reading: 'かすむ' },
+  { kanji: '朽', reading: 'くちる' },    { kanji: '萎', reading: 'しおれる' },
+  { kanji: '綻', reading: 'ほころびる' }, { kanji: '滾', reading: 'たぎる' },
+  { kanji: '蠢', reading: 'うごめく' },  { kanji: '聳', reading: 'そびえる' },
+  { kanji: '閃', reading: 'ひらめく' },  { kanji: '呻', reading: 'うめく' },
+  { kanji: '嗅', reading: 'かぐ' },      { kanji: '掠', reading: 'かすめる' },
+  { kanji: '抉', reading: 'えぐる' },    { kanji: '貪', reading: 'むさぼる' },
+  { kanji: '蔓', reading: 'はびこる' },  { kanji: '逡', reading: 'しりごみする' },
 ]
 
-// 紛らわしい選択肢を優先的に混ぜるグループ
+// 紛らわしい選択肢グループ
 const CONFUSABLE: Record<string, string[]> = {
-  'あつい':   ['あつい', 'あたたかい', 'つめたい', 'さむい'],
-  'はやい':   ['はやい', 'おそい', 'すばやい', 'ちかい'],
-  'おもい':   ['おもい', 'かるい', 'ふかい', 'あさい'],
-  'あかるい': ['あかるい', 'くらい', 'あかい', 'しろい'],
+  'うれえる':   ['うれえる', 'かなしむ', 'なやむ', 'くやむ'],
+  'あわてる':   ['あわてる', 'おどろく', 'まごつく', 'うろたえる'],
+  'おしむ':     ['おしむ', 'くやむ', 'いたむ', 'なげく'],
+  'くやむ':     ['くやむ', 'おしむ', 'いたむ', 'なげく'],
+  'ねたむ':     ['ねたむ', 'うらやむ', 'にくむ', 'そねむ'],
+  'うらやむ':   ['うらやむ', 'ねたむ', 'そねむ', 'したう'],
+  'くつがえす': ['くつがえす', 'ひっくりかえす', 'おおう', 'かぶせる'],
+  'ひそむ':     ['ひそむ', 'ただよう', 'もぐる', 'かくれる'],
+  'ただよう':   ['ただよう', 'ひそむ', 'ただれる', 'さまよう'],
+  'にじむ':     ['にじむ', 'かすむ', 'にじる', 'ぼやける'],
+  'かすむ':     ['かすむ', 'にじむ', 'くもる', 'ぼける'],
+  'しおれる':   ['しおれる', 'ほころびる', 'くちる', 'なえる'],
+  'ほころびる': ['ほころびる', 'しおれる', 'くちる', 'ほどける'],
+  'うごめく':   ['うごめく', 'そびえる', 'ひらめく', 'うねる'],
+  'ひらめく':   ['ひらめく', 'うごめく', 'またたく', 'きらめく'],
+  'むさぼる':   ['むさぼる', 'はびこる', 'えぐる', 'かすめる'],
 }
 
 function makeQ() {
@@ -76,7 +84,7 @@ export function KanjiPuzzle({ onComplete }: Props) {
     <div className="flex flex-col items-center gap-6 p-6">
       <p className="text-white/40 text-xs">{round + 1} / {ROUNDS}</p>
       <p className="text-8xl font-mono">{q.kanji}</p>
-      <p className="text-white/60 text-sm">訓読みは？</p>
+      <p className="text-white/60 text-sm">読み方は？（訓読み）</p>
       {feedback !== null && (
         <p className={feedback ? 'text-green-400' : 'text-red-400'}>
           {feedback ? '✓ 正解!' : `✗ 正解: ${q.answer}`}
