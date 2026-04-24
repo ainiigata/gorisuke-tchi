@@ -7,3 +7,23 @@ body {
   color: #f0f0f0;
   font-family: ui-monospace, monospace;
 }
+
+@keyframes sprite-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes sprite-idle {
+  0%, 100% { transform: translateY(0px) scaleY(1); }
+  40% { transform: translateY(-3px) scaleY(1.02); }
+  60% { transform: translateY(-3px) scaleY(1.02); }
+}
+
+@keyframes sprite-dead {
+  0%, 100% { transform: rotate(-4deg) translateY(2px); }
+  50% { transform: rotate(4deg) translateY(2px); }
+}
+
+.sprite-egg  { animation: sprite-float 2s ease-in-out infinite; }
+.sprite-idle { animation: sprite-idle 2.5s ease-in-out infinite; transform-origin: bottom center; }
+.sprite-dead { animation: sprite-dead 4s ease-in-out infinite; transform-origin: bottom center; }
