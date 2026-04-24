@@ -66,6 +66,11 @@ body {
   100%       { transform: rotate(-7deg) translateY(5px) scaleX(0.97); }
 }
 
+@keyframes timer-shrink {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
 .sprite-egg         { animation: anim-egg        3.2s ease-in-out infinite; transform-origin: bottom center; }
 .sprite-gorilla     { animation: anim-gorilla     5.0s ease-in-out infinite; transform-origin: bottom center; }
 .sprite-silverback  { animation: anim-silverback  6.5s ease-in-out infinite; transform-origin: bottom center; }
