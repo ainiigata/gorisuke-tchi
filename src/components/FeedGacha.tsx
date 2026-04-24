@@ -34,7 +34,7 @@ export function FeedGacha({ item, onClose }: Props) {
         </p>
         <span className="text-7xl">{TYPE_EMOJI[item.type]}</span>
         <p className="text-white font-mono text-lg">{item.type.toUpperCase()}</p>
-        <p className="text-white/40 text-xs">空腹 +{item.hungerRestore}  EXP +{item.expBonus}</p>
+        <p className="text-white/40 text-xs">空腹 +{item.hungerRestore}</p>
         <button
           className="mt-2 px-6 py-2 bg-accent/30 text-accent rounded-full text-sm font-mono"
           onClick={onClose}

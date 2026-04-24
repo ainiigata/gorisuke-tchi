@@ -39,7 +39,6 @@ export interface FeedItem {
   type: 'banana' | 'meat' | 'honey' | 'nut' | 'berry' | 'fish' | 'cake' | 'mystery'
   rarity: 'common' | 'rare' | 'legendary'
   hungerRestore: number
-  expBonus: number
   count: number
 }
 

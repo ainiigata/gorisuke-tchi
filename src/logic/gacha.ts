@@ -3,14 +3,14 @@ import type { FeedItem } from '../types'
 type FeedTemplate = Omit<FeedItem, 'count'>
 
 export const FEED_TABLE: FeedTemplate[] = [
-  { type: 'banana', rarity: 'common',    hungerRestore: 15, expBonus: 0  },
-  { type: 'nut',    rarity: 'common',    hungerRestore: 10, expBonus: 5  },
-  { type: 'berry',  rarity: 'common',    hungerRestore: 12, expBonus: 3  },
-  { type: 'meat',   rarity: 'rare',      hungerRestore: 30, expBonus: 10 },
-  { type: 'fish',   rarity: 'rare',      hungerRestore: 25, expBonus: 15 },
-  { type: 'honey',  rarity: 'rare',      hungerRestore: 20, expBonus: 20 },
-  { type: 'cake',   rarity: 'legendary', hungerRestore: 50, expBonus: 30 },
-  { type: 'mystery',rarity: 'legendary', hungerRestore: 40, expBonus: 30 },
+  { type: 'banana', rarity: 'common',    hungerRestore: 15 },
+  { type: 'nut',    rarity: 'common',    hungerRestore: 10 },
+  { type: 'berry',  rarity: 'common',    hungerRestore: 12 },
+  { type: 'meat',   rarity: 'rare',      hungerRestore: 30 },
+  { type: 'fish',   rarity: 'rare',      hungerRestore: 25 },
+  { type: 'honey',  rarity: 'rare',      hungerRestore: 20 },
+  { type: 'cake',   rarity: 'legendary', hungerRestore: 50 },
+  { type: 'mystery',rarity: 'legendary', hungerRestore: 40 },
 ]
 
 // difficulty 1: common 70% / rare 25% / legendary  5%

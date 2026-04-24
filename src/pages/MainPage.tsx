@@ -141,7 +141,7 @@ export function MainPage() {
               className="bg-white/10 rounded-lg px-3 py-1 text-sm flex items-center gap-1"
               onClick={() => {
                 const used = useFeed(item.type)
-                if (used) feedGorilla(used.hungerRestore, used.expBonus)
+                if (used) feedGorilla(used.hungerRestore)
               }}
             >
               <span>🍌</span>

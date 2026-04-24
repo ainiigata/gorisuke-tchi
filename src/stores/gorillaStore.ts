@@ -7,7 +7,7 @@ import { calcHungerDelta, applyHealthTick } from '../logic/healthEngine'
 interface GorillaState {
   gorilla: Gorilla | null
   hatchEgg: (name: string, generation: number) => void
-  feedGorilla: (hungerRestore: number, expBonus: number) => void
+  feedGorilla: (hungerRestore: number) => void
   tick: () => void
   killGorilla: (cause: 'neglect' | 'hunger') => void
   updateEvolutionType: (counts: { exercise: number; study: number; food: number; rest: number }) => void
@@ -36,14 +36,12 @@ export const useGorillaStore = create<GorillaState>()(
     (set) => ({
       gorilla: null,
       hatchEgg: (name, generation) => set({ gorilla: newGorilla(name, generation) }),
-      feedGorilla: (hungerRestore, expBonus) =>
+      feedGorilla: (hungerRestore) =>
         set(s => {
           if (!s.gorilla || s.gorilla.diedAt) return s
           const g = s.gorilla
           const newHunger = Math.min(100, g.hunger + hungerRestore)
-          const newExp = g.exp + expBonus
-          const newStage = getStageForExp(newExp)
-          return { gorilla: { ...g, hunger: newHunger, exp: newExp, stage: newStage, lastActiveAt: Date.now() } }
+          return { gorilla: { ...g, hunger: newHunger, lastActiveAt: Date.now() } }
         }),
       addExp: (amount) =>
         set(s => {
