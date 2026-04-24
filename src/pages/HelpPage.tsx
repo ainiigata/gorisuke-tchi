@@ -1,4 +1,3 @@
-import { GorisukeSprite } from '../components/GorisukeSprite'
 import { STAGE_NAMES } from '../logic/sprites/spriteData'
 import { EXP_THRESHOLDS } from '../logic/evolutionEngine'
 
@@ -63,14 +62,16 @@ export function HelpPage() {
       <div className="bg-white/5 rounded-2xl p-4">
         <p className="text-white/40 text-xs mb-3">進化チャート</p>
         <div className="flex flex-col gap-2">
-          {STAGE_NAMES.map((name, i) => (
+          {STAGE_NAMES.map((_, i) => (
             <div key={i} className="flex items-center gap-3">
-              <GorisukeSprite stage={i} isDead={false} size={32} />
+              <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white/30 text-sm flex-shrink-0">
+                ？
+              </div>
               <div className="flex-1 flex items-center justify-between">
-                <span className="text-white text-sm font-mono">
-                  Stage {i}　{name}
+                <span className="text-white/50 text-sm font-mono">
+                  Stage {i}　<span className="text-white/20">？？？</span>
                 </span>
-                <span className="text-white/30 text-xs">
+                <span className="text-white/20 text-xs">
                   {EXP_THRESHOLDS[i].toLocaleString()} EXP〜
                 </span>
               </div>
