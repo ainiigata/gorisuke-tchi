@@ -14,18 +14,23 @@ import { CalcChain } from '../games/CalcChain'
 import { MemoryCard } from '../games/MemoryCard'
 import type { FeedItem } from '../types'
 
-const GAME_META: Record<GameId, { label: string; desc: string; difficulty: 1 | 2 | 3 }> = {
-  arithmetic:      { label: '暗算',     desc: '計算問題 5問',      difficulty: 2 },
-  colorRecognition:{ label: '色認識',   desc: 'ストループ 6問',    difficulty: 2 },
-  memoryFlash:     { label: '瞬間記憶', desc: '数列を記憶 3問',    difficulty: 2 },
-  reactionSpeed:   { label: '反応速度', desc: 'タイミングを計れ',  difficulty: 1 },
-  numberSequence:  { label: '数列',     desc: '次の数字は？ 5問',  difficulty: 2 },
-  kanjiPuzzle:     { label: '漢字',     desc: '読み方を選べ 5問',  difficulty: 2 },
-  calcChain:       { label: '計算連鎖', desc: '優先順位に注意 5問', difficulty: 3 },
-  memoryCard:      { label: '神経衰弱', desc: 'ペアを見つけよう',  difficulty: 3 },
+const GAME_META: Record<GameId, { label: string; desc: string; difficulty: 1 | 2 | 3 | 4 }> = {
+  arithmetic:      { label: '暗算',     desc: '計算問題 5問',       difficulty: 1 },
+  colorRecognition:{ label: '色認識',   desc: 'ストループ 6問',     difficulty: 2 },
+  memoryFlash:     { label: '瞬間記憶', desc: '数列を記憶 3問',     difficulty: 2 },
+  reactionSpeed:   { label: '反応速度', desc: 'タイミングを計れ',   difficulty: 1 },
+  numberSequence:  { label: '数列',     desc: '次の数字は？ 5問',   difficulty: 3 },
+  kanjiPuzzle:     { label: '漢字',     desc: '読み方を選べ 5問',   difficulty: 3 },
+  calcChain:       { label: '計算連鎖', desc: '優先順位に注意 5問', difficulty: 4 },
+  memoryCard:      { label: '神経衰弱', desc: 'ペアを見つけよう',   difficulty: 4 },
 }
 
-const DIFFICULTY_STARS: Record<1 | 2 | 3, string> = { 1: '★☆☆', 2: '★★☆', 3: '★★★' }
+const DIFFICULTY_STARS: Record<1 | 2 | 3 | 4, string> = {
+  1: '★☆☆☆',
+  2: '★★☆☆',
+  3: '★★★☆',
+  4: '★★★★',
+}
 
 const GAME_COMPONENTS: Record<GameId, React.ComponentType<{ onComplete: () => void }>> = {
   arithmetic: Arithmetic,

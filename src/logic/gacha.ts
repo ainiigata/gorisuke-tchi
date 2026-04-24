@@ -16,13 +16,15 @@ export const FEED_TABLE: FeedTemplate[] = [
 // difficulty 1: common 70% / rare 25% / legendary  5%
 // difficulty 2: common 55% / rare 35% / legendary 10%
 // difficulty 3: common 35% / rare 45% / legendary 20%
-const THRESHOLDS: Record<1 | 2 | 3, { rare: number; legendary: number }> = {
+// difficulty 4: common 20% / rare 45% / legendary 35%
+const THRESHOLDS: Record<1 | 2 | 3 | 4, { rare: number; legendary: number }> = {
   1: { rare: 0.70, legendary: 0.95 },
   2: { rare: 0.55, legendary: 0.90 },
   3: { rare: 0.35, legendary: 0.80 },
+  4: { rare: 0.20, legendary: 0.65 },
 }
 
-export function rollGacha(difficulty: 1 | 2 | 3 = 1): FeedItem {
+export function rollGacha(difficulty: 1 | 2 | 3 | 4 = 1): FeedItem {
   const { rare, legendary } = THRESHOLDS[difficulty]
   const roll = Math.random()
   let pool: FeedTemplate[]
