@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
-  onComplete: () => void
+  onComplete: (perfect: boolean) => void
 }
 
 const COLORS = [
@@ -39,6 +39,7 @@ export function ColorRecognition({ onComplete }: Props) {
   const [feedback, setFeedback] = useState<boolean | null>(null)
   const [timeUp, setTimeUp]     = useState(false)
   const answeredRef = useRef(false)
+  const perfectRef  = useRef(true)
 
   useEffect(() => {
     answeredRef.current = false
@@ -48,13 +49,14 @@ export function ColorRecognition({ onComplete }: Props) {
       if (answeredRef.current) return
       answeredRef.current = true
       setTimeUp(true)
+      perfectRef.current = false
       soundEngine.playSFX('wrong')
       setFeedback(false)
       setTimeout(() => {
         setFeedback(null)
         setTimeUp(false)
-        if (round + 1 >= ROUNDS) onComplete()
-        else { setRound(x => x + 1); setR(makeRound()) }
+        if (round + 1 >= ROUNDS) onComplete(perfectRef.current)
+        else { answeredRef.current = false; setRound(x => x + 1); setR(makeRound()) }
       }, 800)
     }, TIME_LIMIT_MS)
 
@@ -67,12 +69,13 @@ export function ColorRecognition({ onComplete }: Props) {
     answeredRef.current = true
 
     const correct = name === r.correct.name
+    if (!correct) perfectRef.current = false
     soundEngine.playSFX(correct ? 'correct' : 'wrong')
     setFeedback(correct)
     setTimeout(() => {
       setFeedback(null)
-      if (round + 1 >= ROUNDS) onComplete()
-      else { setRound(x => x + 1); setR(makeRound()) }
+      if (round + 1 >= ROUNDS) onComplete(perfectRef.current)
+      else { answeredRef.current = false; setRound(x => x + 1); setR(makeRound()) }
     }, 500)
   }
 

@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
-  onComplete: () => void
+  onComplete: (perfect: boolean) => void
 }
 
 function makeQuestion() {
@@ -22,6 +22,7 @@ export function Arithmetic({ onComplete }: Props) {
   const [input, setInput] = useState('')
   const [round, setRound] = useState(0)
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null)
+  const perfectRef = useRef(true)
   const ROUNDS = 5
 
   function submit() {
@@ -32,13 +33,14 @@ export function Arithmetic({ onComplete }: Props) {
         setFeedback(null)
         setInput('')
         if (round + 1 >= ROUNDS) {
-          onComplete()
+          onComplete(perfectRef.current)
         } else {
           setRound(r => r + 1)
           setQ(makeQuestion())
         }
       }, 500)
     } else {
+      perfectRef.current = false
       soundEngine.playSFX('wrong')
       setFeedback('wrong')
       setTimeout(() => { setFeedback(null); setInput('') }, 600)

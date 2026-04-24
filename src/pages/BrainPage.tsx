@@ -26,13 +26,10 @@ const GAME_META: Record<GameId, { label: string; desc: string; difficulty: 1 | 2
 }
 
 const DIFFICULTY_STARS: Record<1 | 2 | 3 | 4, string> = {
-  1: '★☆☆☆',
-  2: '★★☆☆',
-  3: '★★★☆',
-  4: '★★★★',
+  1: '★☆☆☆', 2: '★★☆☆', 3: '★★★☆', 4: '★★★★',
 }
 
-const GAME_COMPONENTS: Record<GameId, React.ComponentType<{ onComplete: () => void }>> = {
+const GAME_COMPONENTS: Record<GameId, React.ComponentType<{ onComplete: (perfect: boolean) => void }>> = {
   arithmetic: Arithmetic,
   colorRecognition: ColorRecognition,
   memoryFlash: MemoryFlash,
@@ -51,17 +48,22 @@ export function BrainPage() {
   const { addFeed } = useFeedStore()
   const [playing, setPlaying] = useState<GameId | null>(null)
   const [reward, setReward] = useState<FeedItem | null>(null)
+  const [failed, setFailed] = useState(false)
 
   const stage = gorilla?.stage ?? 0
   const unlocked = getUnlockedGames(stage)
 
-  function handleComplete() {
+  function handleComplete(perfect: boolean) {
     if (!playing) return
     incrementPlay(playing)
-    const item = rollGacha(GAME_META[playing].difficulty)
-    addFeed(item)
     setPlaying(null)
-    setReward(item)
+    if (perfect) {
+      const item = rollGacha(GAME_META[playing].difficulty)
+      addFeed(item)
+      setReward(item)
+    } else {
+      setFailed(true)
+    }
   }
 
   if (playing) {
@@ -78,6 +80,7 @@ export function BrainPage() {
   return (
     <div className="flex flex-col gap-3 p-4">
       <h2 className="text-accent font-mono pt-2">脳トレゲーム</h2>
+      <p className="text-white/30 text-xs">全問正解で餌をゲット！</p>
       {ALL_GAMES.map(id => {
         const isUnlocked = unlocked.includes(id)
         const meta = GAME_META[id]
@@ -96,14 +99,27 @@ export function BrainPage() {
               <p className="text-white/40 text-xs">{meta.desc}</p>
             </div>
             {isUnlocked && (
-              <span className="text-xs text-yellow-400 font-mono">
-                {DIFFICULTY_STARS[meta.difficulty]}
-              </span>
+              <span className="text-xs text-yellow-400 font-mono">{DIFFICULTY_STARS[meta.difficulty]}</span>
             )}
           </button>
         )
       })}
+
       {reward && <FeedGacha item={reward} onClose={() => setReward(null)} />}
+
+      {failed && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+          onClick={() => setFailed(false)}
+        >
+          <div className="flex flex-col items-center gap-4 p-8 text-center">
+            <span className="text-5xl">😔</span>
+            <p className="text-red-400 font-mono text-lg">全問正解できなかった…</p>
+            <p className="text-white/40 text-sm">餌はもらえなかった</p>
+            <p className="text-white/20 text-xs mt-4">タップして戻る</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

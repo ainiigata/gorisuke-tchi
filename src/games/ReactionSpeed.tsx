@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
-  onComplete: () => void
+  onComplete: (perfect: boolean) => void
 }
 
 export function ReactionSpeed({ onComplete }: Props) {
@@ -28,7 +28,7 @@ export function ReactionSpeed({ onComplete }: Props) {
       setTimes(next)
       if (next.length >= ROUNDS) {
         setPhase('result')
-        setTimeout(() => onComplete(), 1500)
+        setTimeout(() => onComplete(true), 1500)
       } else {
         setPhase('wait')
       }

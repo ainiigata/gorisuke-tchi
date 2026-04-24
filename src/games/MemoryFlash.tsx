@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
-  onComplete: () => void
+  onComplete: (perfect: boolean) => void
 }
 
 function makeSeq(len: number) {
@@ -14,6 +14,7 @@ export function MemoryFlash({ onComplete }: Props) {
   const [seq] = useState(() => makeSeq(4))
   const [input, setInput] = useState('')
   const [round, setRound] = useState(0)
+  const perfectRef = useRef(true)
   const ROUNDS = 3
 
   useEffect(() => {
@@ -24,12 +25,14 @@ export function MemoryFlash({ onComplete }: Props) {
   }, [phase, round])
 
   function submit() {
-    soundEngine.playSFX(input === seq.join('') ? 'correct' : 'wrong')
+    const correct = input === seq.join('')
+    if (!correct) perfectRef.current = false
+    soundEngine.playSFX(correct ? 'correct' : 'wrong')
     setPhase('feedback')
     setTimeout(() => {
       setInput('')
       if (round + 1 >= ROUNDS) {
-        onComplete()
+        onComplete(perfectRef.current)
       } else {
         setRound(r => r + 1)
         setPhase('show')

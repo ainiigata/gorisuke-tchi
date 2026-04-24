@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
-  onComplete: () => void
+  onComplete: (perfect: boolean) => void
 }
 
 function makeChain() {
@@ -18,15 +18,17 @@ export function CalcChain({ onComplete }: Props) {
   const [input, setInput] = useState('')
   const [round, setRound] = useState(0)
   const [feedback, setFeedback] = useState<boolean | null>(null)
+  const perfectRef = useRef(true)
   const ROUNDS = 5
 
   function submit() {
     const correct = Number(input) === q.answer
+    if (!correct) perfectRef.current = false
     soundEngine.playSFX(correct ? 'correct' : 'wrong')
     setFeedback(correct)
     setTimeout(() => {
       setFeedback(null); setInput('')
-      if (round + 1 >= ROUNDS) onComplete()
+      if (round + 1 >= ROUNDS) onComplete(perfectRef.current)
       else { setRound(r => r + 1); setQ(makeChain()) }
     }, 600)
   }

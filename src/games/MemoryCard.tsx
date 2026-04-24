@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
-  onComplete: () => void
+  onComplete: (perfect: boolean) => void
 }
 
 const SYMBOLS = ['🍌', '🦍', '🎂', '🌟', '🔥', '💎', '🎯', '🎪']
@@ -17,9 +17,10 @@ export function MemoryCard({ onComplete }: Props) {
   const [cards, setCards] = useState(makeCards)
   const [selected, setSelected] = useState<number[]>([])
   const [locked, setLocked] = useState(false)
+  const perfectRef = useRef(true)
 
   useEffect(() => {
-    if (cards.every(c => c.matched)) setTimeout(onComplete, 500)
+    if (cards.every(c => c.matched)) setTimeout(() => onComplete(perfectRef.current), 500)
   }, [cards, onComplete])
 
   function flip(id: number) {
@@ -36,6 +37,7 @@ export function MemoryCard({ onComplete }: Props) {
             soundEngine.playSFX('correct')
             return cs.map(c => (c.id === a || c.id === b) ? { ...c, matched: true } : c)
           }
+          perfectRef.current = false
           soundEngine.playSFX('wrong')
           return cs.map(c => (c.id === a || c.id === b) ? { ...c, flipped: false } : c)
         })

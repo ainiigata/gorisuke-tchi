@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
-  onComplete: () => void
+  onComplete: (perfect: boolean) => void
 }
 
 const PAIRS = [
@@ -25,15 +25,17 @@ export function KanjiPuzzle({ onComplete }: Props) {
   const [q, setQ] = useState(makeQ)
   const [round, setRound] = useState(0)
   const [feedback, setFeedback] = useState<boolean | null>(null)
+  const perfectRef = useRef(true)
   const ROUNDS = 5
 
   function pick(r: string) {
     const correct = r === q.answer
+    if (!correct) perfectRef.current = false
     soundEngine.playSFX(correct ? 'correct' : 'wrong')
     setFeedback(correct)
     setTimeout(() => {
       setFeedback(null)
-      if (round + 1 >= ROUNDS) onComplete()
+      if (round + 1 >= ROUNDS) onComplete(perfectRef.current)
       else { setRound(x => x + 1); setQ(makeQ()) }
     }, 500)
   }
