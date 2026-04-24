@@ -1,9 +1,12 @@
+export type DayOfWeek = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'
+export type EvolutionType = 'muscle' | 'scholar' | 'gourmet' | 'zen' | 'balanced'
+
 export interface Gorilla {
   id: string
   generation: number
   name: string
   stage: number
-  evolutionType: 'muscle' | 'scholar' | 'gourmet' | 'zen' | 'balanced' | null
+  evolutionType: EvolutionType | null
   hp: number
   hunger: number
   exp: number
@@ -13,18 +16,16 @@ export interface Gorilla {
   lastActiveAt: number
 }
 
-export type DayOfWeek = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'
-
 export interface Routine {
   id: string
   title: string
   category: 'exercise' | 'study' | 'food' | 'rest' | 'custom'
   customCategoryName?: string
   days: DayOfWeek[]
-  timeType: 'exact' | 'zone' | 'anytime'
-  // timeType === 'exact' のとき time は必須、timeType === 'zone' のとき zone は必須
-  time?: string
+  timeType: 'anytime' | 'zone' | 'range'
   zone?: 'morning' | 'afternoon' | 'evening'
+  timeFrom?: string  // "06:00"
+  timeTo?: string    // "06:10"
   expReward: number
 }
 
@@ -50,6 +51,5 @@ export interface MuseumEntry {
   evolutionType: EvolutionType | null
 }
 
-export type EvolutionType = 'muscle' | 'scholar' | 'gourmet' | 'zen' | 'balanced'
 export type FeedType = FeedItem['type']
 export type FeedRarity = FeedItem['rarity']

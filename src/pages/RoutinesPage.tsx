@@ -20,6 +20,9 @@ export function RoutinesPage() {
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState<Routine['category']>('exercise')
   const [days, setDays] = useState<Routine['days']>(['mon', 'tue', 'wed', 'thu', 'fri'])
+  const [timeType, setTimeType] = useState<Routine['timeType']>('anytime')
+  const [timeFrom, setTimeFrom] = useState('07:00')
+  const [timeTo, setTimeTo] = useState('07:30')
 
   function toggleDay(d: Routine['days'][number]) {
     setDays(prev => prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d])
@@ -27,7 +30,12 @@ export function RoutinesPage() {
 
   function handleAdd() {
     if (!title.trim()) return
-    addRoutine({ title: title.trim(), category, days, timeType: 'anytime', expReward: 20 })
+    const base = { title: title.trim(), category, days, expReward: 20 }
+    if (timeType === 'range') {
+      addRoutine({ ...base, timeType: 'range', timeFrom, timeTo })
+    } else {
+      addRoutine({ ...base, timeType: 'anytime' })
+    }
     setTitle('')
   }
 
@@ -42,6 +50,7 @@ export function RoutinesPage() {
           value={title}
           onChange={e => setTitle(e.target.value)}
         />
+
         <div className="flex flex-wrap gap-2">
           {CATEGORIES.map(c => (
             <button
@@ -53,6 +62,7 @@ export function RoutinesPage() {
             </button>
           ))}
         </div>
+
         <div className="flex gap-1">
           {DAYS.map(d => (
             <button
@@ -64,6 +74,41 @@ export function RoutinesPage() {
             </button>
           ))}
         </div>
+
+        {/* 時間設定 */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setTimeType('anytime')}
+            className={`flex-1 py-1 rounded text-xs ${timeType === 'anytime' ? 'bg-accent/40 text-accent' : 'bg-white/10 text-white/40'}`}
+          >
+            いつでも
+          </button>
+          <button
+            onClick={() => setTimeType('range')}
+            className={`flex-1 py-1 rounded text-xs ${timeType === 'range' ? 'bg-accent/40 text-accent' : 'bg-white/10 text-white/40'}`}
+          >
+            時間帯指定
+          </button>
+        </div>
+
+        {timeType === 'range' && (
+          <div className="flex items-center gap-2 bg-white/5 rounded-lg px-3 py-2">
+            <input
+              type="time"
+              value={timeFrom}
+              onChange={e => setTimeFrom(e.target.value)}
+              className="bg-transparent text-white text-sm flex-1 outline-none"
+            />
+            <span className="text-white/30 text-sm">〜</span>
+            <input
+              type="time"
+              value={timeTo}
+              onChange={e => setTimeTo(e.target.value)}
+              className="bg-transparent text-white text-sm flex-1 outline-none"
+            />
+          </div>
+        )}
+
         <button
           className="bg-accent/30 text-accent rounded-lg py-2 text-sm font-mono"
           onClick={handleAdd}
@@ -76,6 +121,9 @@ export function RoutinesPage() {
         {routines.map(r => (
           <div key={r.id} className="flex items-center gap-2 bg-white/5 rounded-lg px-3 py-2">
             <span className="flex-1 text-sm text-white/80">{r.title}</span>
+            {r.timeType === 'range' && r.timeFrom && r.timeTo && (
+              <span className="text-xs text-white/30">{r.timeFrom}〜{r.timeTo}</span>
+            )}
             <span className="text-xs text-white/30">{r.days.join(' ')}</span>
             <button
               className="text-red-400/60 text-xs px-2"

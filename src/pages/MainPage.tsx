@@ -15,8 +15,29 @@ function todayKey() {
 }
 
 function todayDow(): Routine['days'][number] {
-  const days = ['sun','mon','tue','wed','thu','fri','sat'] as const
+  const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const
   return days[new Date().getDay()]
+}
+
+function timeStrToMinutes(t: string): number {
+  const [h, m] = t.split(':').map(Number)
+  return h * 60 + m
+}
+
+function getNowMinutes(): number {
+  const now = new Date()
+  return now.getHours() * 60 + now.getMinutes()
+}
+
+type RangeStatus = 'upcoming' | 'active' | 'passed'
+
+function getRangeStatus(timeFrom: string, timeTo: string): RangeStatus {
+  const now = getNowMinutes()
+  const from = timeStrToMinutes(timeFrom)
+  const to = timeStrToMinutes(timeTo)
+  if (now < from) return 'upcoming'
+  if (now <= to) return 'active'
+  return 'passed'
 }
 
 export function MainPage() {
@@ -137,18 +158,31 @@ export function MainPage() {
           {todayRoutines.length === 0 && (
             <p className="text-white/20 text-sm text-center py-4">今日のルーティーンがありません</p>
           )}
-          {todayRoutines.map(r => (
-            <RoutineItem
-              key={r.id}
-              routine={r}
-              completed={completedIds.includes(r.id)}
-              onToggle={(id) => {
-                if (!completedIds.includes(id)) {
+          {todayRoutines.map(r => {
+            const completed = completedIds.includes(r.id)
+            const failed =
+              !completed &&
+              r.timeType === 'range' &&
+              r.timeFrom != null &&
+              r.timeTo != null &&
+              getRangeStatus(r.timeFrom, r.timeTo) === 'passed'
+
+            return (
+              <RoutineItem
+                key={r.id}
+                routine={r}
+                completed={completed}
+                failed={failed}
+                onToggle={(id) => {
+                  if (completed || failed) return
+                  if (r.timeType === 'range' && r.timeFrom && r.timeTo) {
+                    if (getRangeStatus(r.timeFrom, r.timeTo) !== 'active') return
+                  }
                   completeRoutine(id, today, r.expReward)
-                }
-              }}
-            />
-          ))}
+                }}
+              />
+            )
+          })}
         </div>
       </div>
     </div>
