@@ -14,16 +14,18 @@ import { CalcChain } from '../games/CalcChain'
 import { MemoryCard } from '../games/MemoryCard'
 import type { FeedItem } from '../types'
 
-const GAME_META: Record<GameId, { label: string; desc: string }> = {
-  arithmetic:      { label: '暗算',     desc: '計算問題 5問' },
-  colorRecognition:{ label: '色認識',   desc: '色の名前 5問' },
-  memoryFlash:     { label: '瞬間記憶', desc: '数列を記憶 3問' },
-  reactionSpeed:   { label: '反応速度', desc: 'タイミングを計れ' },
-  numberSequence:  { label: '数列',     desc: '次の数字は？ 5問' },
-  kanjiPuzzle:     { label: '漢字',     desc: '読み方を選べ 5問' },
-  calcChain:       { label: '計算連鎖', desc: '優先順位に注意 5問' },
-  memoryCard:      { label: '神経衰弱', desc: 'ペアを見つけよう' },
+const GAME_META: Record<GameId, { label: string; desc: string; difficulty: 1 | 2 | 3 }> = {
+  arithmetic:      { label: '暗算',     desc: '計算問題 5問',      difficulty: 2 },
+  colorRecognition:{ label: '色認識',   desc: 'ストループ 6問',    difficulty: 2 },
+  memoryFlash:     { label: '瞬間記憶', desc: '数列を記憶 3問',    difficulty: 2 },
+  reactionSpeed:   { label: '反応速度', desc: 'タイミングを計れ',  difficulty: 1 },
+  numberSequence:  { label: '数列',     desc: '次の数字は？ 5問',  difficulty: 2 },
+  kanjiPuzzle:     { label: '漢字',     desc: '読み方を選べ 5問',  difficulty: 2 },
+  calcChain:       { label: '計算連鎖', desc: '優先順位に注意 5問', difficulty: 3 },
+  memoryCard:      { label: '神経衰弱', desc: 'ペアを見つけよう',  difficulty: 3 },
 }
+
+const DIFFICULTY_STARS: Record<1 | 2 | 3, string> = { 1: '★☆☆', 2: '★★☆', 3: '★★★' }
 
 const GAME_COMPONENTS: Record<GameId, React.ComponentType<{ onComplete: () => void }>> = {
   arithmetic: Arithmetic,
@@ -51,7 +53,7 @@ export function BrainPage() {
   function handleComplete() {
     if (!playing) return
     incrementPlay(playing)
-    const item = rollGacha()
+    const item = rollGacha(GAME_META[playing].difficulty)
     addFeed(item)
     setPlaying(null)
     setReward(item)
@@ -84,10 +86,15 @@ export function BrainPage() {
             }`}
           >
             <span className="text-2xl">{isUnlocked ? '🧠' : '🔒'}</span>
-            <div>
+            <div className="flex-1">
               <p className="text-white font-mono text-sm">{meta.label}</p>
               <p className="text-white/40 text-xs">{meta.desc}</p>
             </div>
+            {isUnlocked && (
+              <span className="text-xs text-yellow-400 font-mono">
+                {DIFFICULTY_STARS[meta.difficulty]}
+              </span>
+            )}
           </button>
         )
       })}
