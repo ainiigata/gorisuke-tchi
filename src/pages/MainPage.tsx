@@ -7,6 +7,7 @@ import { useRoutineStore } from '../stores/routineStore'
 import { useFeedStore } from '../stores/feedStore'
 import { useMuseumStore } from '../stores/museumStore'
 import { EXP_THRESHOLDS } from '../logic/evolutionEngine'
+import { requestNotificationPermission, checkAndNotify } from '../logic/notifications'
 import type { Routine } from '../types'
 
 function todayKey() {
@@ -26,10 +27,16 @@ export function MainPage() {
   const [nameInput, setNameInput] = useState('')
 
   useEffect(() => {
-    const id = setInterval(() => tick(), 60_000)
+    requestNotificationPermission()
+    const id = setInterval(() => {
+      tick()
+      if (gorilla && !gorilla.diedAt) {
+        checkAndNotify(gorilla.hp, gorilla.hunger)
+      }
+    }, 60_000)
     tick()
     return () => clearInterval(id)
-  }, [tick])
+  }, [tick, gorilla])
 
   const today = todayKey()
   const dow = todayDow()
