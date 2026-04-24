@@ -42,7 +42,7 @@ function getRangeStatus(timeFrom: string, timeTo: string): RangeStatus {
 }
 
 export function MainPage() {
-  const { gorilla, hatchEgg, feedGorilla, tick } = useGorillaStore()
+  const { gorilla, hatchEgg, feedGorilla, tick, addExp } = useGorillaStore()
   const { routines, completeRoutine, getTodayLog, logs, getStreakDays } = useRoutineStore()
   const { stock, useFeed } = useFeedStore()
   const { entries, addEntry } = useMuseumStore()
@@ -194,6 +194,7 @@ export function MainPage() {
                     if (getRangeStatus(r.timeFrom, r.timeTo) !== 'active') return
                   }
                   completeRoutine(id, today, r.expReward)
+                  addExp(r.expReward)
                   soundEngine.playSFX('complete')
                 }}
               />
