@@ -17,7 +17,7 @@ export function applyHealthTick(
 ): { hp: number; hunger: number } {  // 戻り値型を明示
   const newHunger = Math.min(100, Math.max(0, current.hunger + hungerDelta))
   let hpFromHunger = 0
-  if (current.hunger === 0) {
+  if (newHunger === 0) {
     hpFromHunger = -Math.floor(elapsedSeconds / 3600) * 5
   }
   const newHp = Math.min(100, Math.max(0, current.hp + hpDelta + hpFromHunger))

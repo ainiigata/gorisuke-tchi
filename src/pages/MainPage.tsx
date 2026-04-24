@@ -21,22 +21,21 @@ function todayDow(): Routine['days'][number] {
 
 export function MainPage() {
   const { gorilla, hatchEgg, feedGorilla, tick } = useGorillaStore()
-  const { routines, completeRoutine, getTodayLog } = useRoutineStore()
+  const { routines, completeRoutine, getTodayLog, logs, getStreakDays } = useRoutineStore()
   const { stock, useFeed } = useFeedStore()
-  const { addEntry } = useMuseumStore()
+  const { entries, addEntry } = useMuseumStore()
   const [nameInput, setNameInput] = useState('')
 
   useEffect(() => {
     requestNotificationPermission()
-    const id = setInterval(() => {
-      tick()
-      if (gorilla && !gorilla.diedAt) {
-        checkAndNotify(gorilla.hp, gorilla.hunger)
-      }
-    }, 60_000)
     tick()
+    const id = setInterval(() => tick(), 60_000)
     return () => clearInterval(id)
-  }, [tick, gorilla])
+  }, [tick])
+
+  useEffect(() => {
+    if (gorilla && !gorilla.diedAt) checkAndNotify(gorilla.hp, gorilla.hunger)
+  }, [gorilla])
 
   const today = todayKey()
   const dow = todayDow()
@@ -57,7 +56,7 @@ export function MainPage() {
         />
         <button
           className="px-8 py-3 bg-accent/30 text-accent rounded-full font-mono"
-          onClick={() => nameInput && hatchEgg(nameInput, 1)}
+          onClick={() => nameInput && hatchEgg(nameInput, entries.length + 1)}
         >
           スタート
         </button>
@@ -78,8 +77,8 @@ export function MainPage() {
           onClick={() => {
             addEntry({
               gorilla,
-              totalRoutinesCompleted: log?.completedIds.length ?? 0,
-              longestStreak: 0,
+              totalRoutinesCompleted: logs.reduce((sum, l) => sum + l.completedIds.length, 0),
+              longestStreak: getStreakDays(today),
               finalStage: gorilla.stage,
               evolutionType: gorilla.evolutionType,
             })
