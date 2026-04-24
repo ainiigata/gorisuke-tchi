@@ -48,6 +48,10 @@ export interface MuseumEntry {
   longestStreak: number
   finalStage: number
   evolutionType: EvolutionType | null
+  // 追加フィールド
+  daysLived: number
+  totalExp: number
+  retiredAt: number | null  // nullなら死亡、値があれば引退
 }
 
 export type FeedType = FeedItem['type']

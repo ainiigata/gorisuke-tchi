@@ -123,6 +123,9 @@ export function MainPage() {
               longestStreak: getStreakDays(today),
               finalStage: gorilla.stage,
               evolutionType: gorilla.evolutionType,
+              daysLived: Math.max(1, Math.floor((Date.now() - gorilla.bornAt) / 86400000)),
+              totalExp: gorilla.exp,
+              retiredAt: null,
             })
             setNameInput('')
           }}
@@ -154,6 +157,9 @@ export function MainPage() {
             longestStreak: getStreakDays(today),
             finalStage: gorilla.stage,
             evolutionType: gorilla.evolutionType,
+            daysLived: Math.max(1, Math.floor((Date.now() - gorilla.bornAt) / 86400000)),
+            totalExp: gorilla.exp,
+            retiredAt: Date.now(),
           })
           setShowFarewell(false)
           setNameInput('')
