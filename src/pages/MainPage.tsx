@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { GorisukeSprite } from '../components/GorisukeSprite'
+import { LevelUpModal } from '../components/LevelUpModal'
 import { StatusBars } from '../components/StatusBars'
 import { RoutineItem } from '../components/RoutineItem'
 import { useGorillaStore } from '../stores/gorillaStore'
@@ -7,6 +8,7 @@ import { useRoutineStore } from '../stores/routineStore'
 import { useFeedStore } from '../stores/feedStore'
 import { useMuseumStore } from '../stores/museumStore'
 import { EXP_THRESHOLDS } from '../logic/evolutionEngine'
+import { STAGE_NAMES, STAGE_SIZES } from '../logic/sprites/spriteData'
 import { requestNotificationPermission, checkAndNotify } from '../logic/notifications'
 import { soundEngine } from '../logic/soundEngine'
 import type { Routine } from '../types'
@@ -47,6 +49,7 @@ export function MainPage() {
   const { stock, useFeed } = useFeedStore()
   const { entries, addEntry } = useMuseumStore()
   const [nameInput, setNameInput] = useState('')
+  const [levelUpStage, setLevelUpStage] = useState<number | null>(null)
   const prevStageRef = useRef<number | undefined>(undefined)
   const prevDiedAtRef = useRef<number | null>(null)
 
@@ -68,6 +71,7 @@ export function MainPage() {
       soundEngine.playSFX('die')
     } else if (!gorilla.diedAt && prevStageRef.current !== undefined && gorilla.stage > prevStageRef.current) {
       soundEngine.playSFX('evolve')
+      setLevelUpStage(gorilla.stage)
     }
     prevStageRef.current = gorilla.stage
     prevDiedAtRef.current = gorilla.diedAt
@@ -129,16 +133,25 @@ export function MainPage() {
 
   const expToNext = EXP_THRESHOLDS[Math.min(gorilla.stage + 1, 7)]
   const totalStock = stock.reduce((s, f) => s + f.count, 0)
+  const stageName = STAGE_NAMES[Math.min(gorilla.stage, STAGE_NAMES.length - 1)]
+  const spriteSize = STAGE_SIZES[Math.min(gorilla.stage, STAGE_SIZES.length - 1)]
 
   return (
+    <>
+    {levelUpStage !== null && (
+      <LevelUpModal stage={levelUpStage} onClose={() => setLevelUpStage(null)} />
+    )}
     <div className="flex flex-col gap-4 p-4">
       <div className="flex items-center justify-between pt-2">
         <h1 className="text-accent font-mono">{gorilla.name}</h1>
-        <span className="text-white/40 text-xs">Stage {gorilla.stage}</span>
+        <div className="text-right">
+          <p className="text-white/70 text-xs font-mono">{stageName}</p>
+          <p className="text-white/30 text-xs">Stage {gorilla.stage}</p>
+        </div>
       </div>
 
       <div className="flex justify-center py-4">
-        <GorisukeSprite stage={gorilla.stage} isDead={false} size={128} />
+        <GorisukeSprite stage={gorilla.stage} isDead={false} size={spriteSize} />
       </div>
 
       <StatusBars
@@ -203,5 +216,6 @@ export function MainPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

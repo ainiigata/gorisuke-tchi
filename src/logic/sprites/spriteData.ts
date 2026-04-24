@@ -1,7 +1,13 @@
-// src/logic/sprites/spriteData.ts
 export interface SpriteRect {
   x: number; y: number; w: number; h: number; fill: string; opacity?: number
 }
+
+export const STAGE_NAMES = [
+  'たまご', 'ちびゴリ', 'わかゴリ', 'ゴリスケ', 'もりゴリ', 'つよゴリ', 'シルバーバック', '大ゴリ王',
+] as const
+
+// stage → display size in px
+export const STAGE_SIZES = [80, 96, 110, 120, 130, 140, 154, 168] as const
 
 // たまご (stage 0)
 export const EGG_SPRITE: SpriteRect[] = [
@@ -22,8 +28,8 @@ export const EGG_SPRITE: SpriteRect[] = [
   { x: 13, y: 14, w: 3,  h: 1, fill: '#c8a040', opacity: 0.7 },
 ]
 
-// 若ゴリ (stage 1-5)
-export const YOUNG_GORILLA_SPRITE: SpriteRect[] = [
+// 若ゴリ (stage 2-3)
+const YOUNG_GORILLA_SPRITE_BASE: SpriteRect[] = [
   { x: 9,  y: 1,  w: 14, h: 2, fill: '#5c3820' },
   { x: 7,  y: 3,  w: 18, h: 2, fill: '#6b4025' },
   { x: 6,  y: 5,  w: 20, h: 6, fill: '#6b4025' },
@@ -52,6 +58,34 @@ export const YOUNG_GORILLA_SPRITE: SpriteRect[] = [
   { x: 8,  y: 37, w: 7,  h: 3,  fill: '#5c3820' },
   { x: 17, y: 33, w: 6,  h: 5,  fill: '#6b4025' },
   { x: 17, y: 37, w: 7,  h: 3,  fill: '#5c3820' },
+]
+
+export const YOUNG_GORILLA_SPRITE: SpriteRect[] = YOUNG_GORILLA_SPRITE_BASE
+
+// ちびゴリ (stage 1) — lighter golden tones + blush
+const BABY_COLORS: Record<string, string> = {
+  '#5c3820': '#9a7050', '#6b4025': '#aa8060', '#7a4e30': '#ba9070',
+  '#e8c07a': '#f5e4a8', '#c4a060': '#e8d090', '#c4814a': '#d8a878',
+  '#3a2010': '#7a5040',
+}
+
+export const BABY_GORILLA_SPRITE: SpriteRect[] = [
+  ...YOUNG_GORILLA_SPRITE_BASE.map(r => ({ ...r, fill: BABY_COLORS[r.fill] ?? r.fill })),
+  { x: 9,  y: 16, w: 3, h: 2, fill: '#ffaaaa', opacity: 0.45 },
+  { x: 20, y: 16, w: 3, h: 2, fill: '#ffaaaa', opacity: 0.45 },
+]
+
+// もりゴリ (stage 4-5) — darker near-black tones + heavy brow ridges
+const ADULT_COLORS: Record<string, string> = {
+  '#5c3820': '#2a1008', '#6b4025': '#3a1808', '#7a4e30': '#4a2412',
+  '#e8c07a': '#b87840', '#c4a060': '#a06030', '#c4814a': '#886028',
+  '#3a2010': '#180800',
+}
+
+export const ADULT_GORILLA_SPRITE: SpriteRect[] = [
+  ...YOUNG_GORILLA_SPRITE_BASE.map(r => ({ ...r, fill: ADULT_COLORS[r.fill] ?? r.fill })),
+  { x: 9,  y: 12, w: 5, h: 2, fill: '#100400', opacity: 0.85 },
+  { x: 18, y: 12, w: 5, h: 2, fill: '#100400', opacity: 0.85 },
 ]
 
 // シルバーバック (stage 6-7)
@@ -96,7 +130,7 @@ export const SILVERBACK_SPRITE: SpriteRect[] = [
 
 // 死亡バリエーション（×目）
 export const DEAD_SPRITE: SpriteRect[] = [
-  ...YOUNG_GORILLA_SPRITE.filter(r => !(r.y >= 13 && r.y <= 16 && r.x >= 10)),
+  ...YOUNG_GORILLA_SPRITE_BASE.filter(r => !(r.y >= 13 && r.y <= 16 && r.x >= 10)),
   { x: 10, y: 13, w: 1, h: 1, fill: '#fff' },
   { x: 13, y: 16, w: 1, h: 1, fill: '#fff' },
   { x: 11, y: 14, w: 1, h: 1, fill: '#ff4444' },
@@ -114,7 +148,9 @@ export const DEAD_SPRITE: SpriteRect[] = [
 export function getSpriteForStage(stage: number, isDead: boolean): SpriteRect[] {
   if (isDead) return DEAD_SPRITE
   if (stage === 0) return EGG_SPRITE
-  if (stage <= 5) return YOUNG_GORILLA_SPRITE
+  if (stage === 1) return BABY_GORILLA_SPRITE
+  if (stage <= 3) return YOUNG_GORILLA_SPRITE
+  if (stage <= 5) return ADULT_GORILLA_SPRITE
   return SILVERBACK_SPRITE
 }
 
