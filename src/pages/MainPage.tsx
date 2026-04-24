@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { GorisukeSprite } from '../components/GorisukeSprite'
 import { LevelUpModal } from '../components/LevelUpModal'
 import { FarewellEnding } from '../components/FarewellEnding'
+import { Onboarding } from '../components/Onboarding'
 import { StatusBars } from '../components/StatusBars'
 import { RoutineItem } from '../components/RoutineItem'
 import { useGorillaStore } from '../stores/gorillaStore'
@@ -52,6 +53,9 @@ export function MainPage() {
   const [nameInput, setNameInput] = useState('')
   const [levelUpStage, setLevelUpStage] = useState<number | null>(null)
   const [showFarewell, setShowFarewell] = useState(false)
+  const [showOnboarding, setShowOnboarding] = useState(
+    () => !localStorage.getItem('gorisuke-onboarding-done')
+  )
   const prevStageRef = useRef<number | undefined>(undefined)
   const prevDiedAtRef = useRef<number | null>(null)
 
@@ -145,6 +149,12 @@ export function MainPage() {
 
   return (
     <>
+    {showOnboarding && (
+      <Onboarding onDone={() => {
+        localStorage.setItem('gorisuke-onboarding-done', '1')
+        setShowOnboarding(false)
+      }} />
+    )}
     {showFarewell && (
       <FarewellEnding
         gorilla={gorilla}
