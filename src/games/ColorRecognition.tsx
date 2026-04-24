@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
   onComplete: () => void
@@ -33,6 +34,7 @@ export function ColorRecognition({ onComplete }: Props) {
 
   function pick(name: string) {
     const correct = name === r.ink.name
+    soundEngine.playSFX(correct ? 'correct' : 'wrong')
     setFeedback(correct)
     setTimeout(() => {
       setFeedback(null)

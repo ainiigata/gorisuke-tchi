@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
   onComplete: () => void
@@ -25,6 +26,7 @@ export function Arithmetic({ onComplete }: Props) {
 
   function submit() {
     if (Number(input) === q.answer) {
+      soundEngine.playSFX('correct')
       setFeedback('correct')
       setTimeout(() => {
         setFeedback(null)
@@ -37,6 +39,7 @@ export function Arithmetic({ onComplete }: Props) {
         }
       }, 500)
     } else {
+      soundEngine.playSFX('wrong')
       setFeedback('wrong')
       setTimeout(() => { setFeedback(null); setInput('') }, 600)
     }

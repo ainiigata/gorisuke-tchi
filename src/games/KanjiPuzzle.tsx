@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
   onComplete: () => void
@@ -28,6 +29,7 @@ export function KanjiPuzzle({ onComplete }: Props) {
 
   function pick(r: string) {
     const correct = r === q.answer
+    soundEngine.playSFX(correct ? 'correct' : 'wrong')
     setFeedback(correct)
     setTimeout(() => {
       setFeedback(null)

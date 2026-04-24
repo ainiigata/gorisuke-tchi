@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
   onComplete: () => void
@@ -32,8 +33,10 @@ export function MemoryCard({ onComplete }: Props) {
       setTimeout(() => {
         setCards(cs => {
           if (cs[a].symbol === cs[b].symbol) {
+            soundEngine.playSFX('correct')
             return cs.map(c => (c.id === a || c.id === b) ? { ...c, matched: true } : c)
           }
+          soundEngine.playSFX('wrong')
           return cs.map(c => (c.id === a || c.id === b) ? { ...c, flipped: false } : c)
         })
         setLocked(false)

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
   onComplete: () => void
@@ -23,6 +24,7 @@ export function MemoryFlash({ onComplete }: Props) {
   }, [phase, round])
 
   function submit() {
+    soundEngine.playSFX(input === seq.join('') ? 'correct' : 'wrong')
     setPhase('feedback')
     setTimeout(() => {
       setInput('')

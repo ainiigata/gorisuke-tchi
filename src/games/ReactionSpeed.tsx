@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
   onComplete: () => void
@@ -21,6 +22,7 @@ export function ReactionSpeed({ onComplete }: Props) {
 
   function tap() {
     if (phase === 'go') {
+      soundEngine.playSFX('correct')
       const ms = Date.now() - startRef.current
       const next = [...times, ms]
       setTimes(next)

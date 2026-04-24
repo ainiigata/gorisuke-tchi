@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { GorisukeSprite } from '../components/GorisukeSprite'
 import { StatusBars } from '../components/StatusBars'
 import { RoutineItem } from '../components/RoutineItem'
@@ -8,6 +8,7 @@ import { useFeedStore } from '../stores/feedStore'
 import { useMuseumStore } from '../stores/museumStore'
 import { EXP_THRESHOLDS } from '../logic/evolutionEngine'
 import { requestNotificationPermission, checkAndNotify } from '../logic/notifications'
+import { soundEngine } from '../logic/soundEngine'
 import type { Routine } from '../types'
 
 function todayKey() {
@@ -46,6 +47,8 @@ export function MainPage() {
   const { stock, useFeed } = useFeedStore()
   const { entries, addEntry } = useMuseumStore()
   const [nameInput, setNameInput] = useState('')
+  const prevStageRef = useRef<number | undefined>(undefined)
+  const prevDiedAtRef = useRef<number | null>(null)
 
   useEffect(() => {
     requestNotificationPermission()
@@ -57,6 +60,18 @@ export function MainPage() {
   useEffect(() => {
     if (gorilla && !gorilla.diedAt) checkAndNotify(gorilla.hp, gorilla.hunger)
   }, [gorilla])
+
+  // 進化・死亡のサウンド
+  useEffect(() => {
+    if (!gorilla) return
+    if (gorilla.diedAt && prevDiedAtRef.current === null) {
+      soundEngine.playSFX('die')
+    } else if (!gorilla.diedAt && prevStageRef.current !== undefined && gorilla.stage > prevStageRef.current) {
+      soundEngine.playSFX('evolve')
+    }
+    prevStageRef.current = gorilla.stage
+    prevDiedAtRef.current = gorilla.diedAt
+  }, [gorilla?.stage, gorilla?.diedAt])
 
   const today = todayKey()
   const dow = todayDow()
@@ -77,7 +92,7 @@ export function MainPage() {
         />
         <button
           className="px-8 py-3 bg-accent/30 text-accent rounded-full font-mono"
-          onClick={() => nameInput && hatchEgg(nameInput, entries.length + 1)}
+          onClick={() => { if (nameInput) { hatchEgg(nameInput, entries.length + 1); soundEngine.playSFX('hatch') } }}
         >
           スタート
         </button>
@@ -141,7 +156,7 @@ export function MainPage() {
               className="bg-white/10 rounded-lg px-3 py-1 text-sm flex items-center gap-1"
               onClick={() => {
                 const used = useFeed(item.type)
-                if (used) feedGorilla(used.hungerRestore)
+                if (used) { feedGorilla(used.hungerRestore); soundEngine.playSFX('feed') }
               }}
             >
               <span>🍌</span>
@@ -179,6 +194,7 @@ export function MainPage() {
                     if (getRangeStatus(r.timeFrom, r.timeTo) !== 'active') return
                   }
                   completeRoutine(id, today, r.expReward)
+                  soundEngine.playSFX('complete')
                 }}
               />
             )

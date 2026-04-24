@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { soundEngine } from '../logic/soundEngine'
 
 interface Props {
   onComplete: () => void
@@ -21,6 +22,7 @@ export function CalcChain({ onComplete }: Props) {
 
   function submit() {
     const correct = Number(input) === q.answer
+    soundEngine.playSFX(correct ? 'correct' : 'wrong')
     setFeedback(correct)
     setTimeout(() => {
       setFeedback(null); setInput('')
