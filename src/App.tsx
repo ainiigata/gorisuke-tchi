@@ -5,6 +5,7 @@ import { MainPage } from './pages/MainPage'
 import { RoutinesPage } from './pages/RoutinesPage'
 import { BrainPage } from './pages/BrainPage'
 import { MuseumPage } from './pages/MuseumPage'
+import { HelpPage } from './pages/HelpPage'
 import { soundEngine } from './logic/soundEngine'
 
 function BgmController() {
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="/routines" element={<RoutinesPage />} />
             <Route path="/brain" element={<BrainPage />} />
             <Route path="/museum" element={<MuseumPage />} />
+            <Route path="/help" element={<HelpPage />} />
           </Routes>
           <BottomNav />
         </div>

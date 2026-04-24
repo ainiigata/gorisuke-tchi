@@ -5,6 +5,7 @@ const tabs = [
   { to: '/routines', icon: '📋', label: 'ROUTINE' },
   { to: '/brain',    icon: '🧠', label: 'BRAIN' },
   { to: '/museum',   icon: '📚', label: 'MUSEUM' },
+  { to: '/help',     icon: '❓', label: 'HELP' },
 ]
 
 export function BottomNav() {
