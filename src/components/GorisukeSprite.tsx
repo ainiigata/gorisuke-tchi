@@ -11,7 +11,13 @@ export function GorisukeSprite({ stage, isDead, size = 128 }: Props) {
   const viewBox = getViewBox(stage)
   const [, , vw, vh] = viewBox.split(' ').map(Number)
   const height = Math.round((size / vw) * vh)
-  const animClass = isDead ? 'sprite-dead' : stage === 0 ? 'sprite-egg' : 'sprite-idle'
+  const animClass = isDead
+    ? 'sprite-dead'
+    : stage === 0
+    ? 'sprite-egg'
+    : stage >= 6
+    ? 'sprite-silverback'
+    : 'sprite-gorilla'
 
   return (
     <svg

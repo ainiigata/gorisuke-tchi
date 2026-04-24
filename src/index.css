@@ -8,22 +8,65 @@ body {
   font-family: ui-monospace, monospace;
 }
 
-@keyframes sprite-float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
+/* 卵：左右ゆらゆら＋たまに跳ねる */
+@keyframes anim-egg {
+  0%         { transform: rotate(0deg)   translateY(0px); }
+  10%        { transform: rotate(-5deg)  translateY(-2px); }
+  22%        { transform: rotate(5deg)   translateY(-1px); }
+  34%        { transform: rotate(-4deg)  translateY(-2px); }
+  46%        { transform: rotate(3deg)   translateY(-1px); }
+  58%, 70%   { transform: rotate(0deg)   translateY(0px); }
+  80%        { transform: rotate(0deg)   translateY(-5px); }
+  88%        { transform: rotate(0deg)   translateY(0px); }
+  94%        { transform: rotate(0deg)   translateY(-3px); }
+  100%       { transform: rotate(0deg)   translateY(0px); }
 }
 
-@keyframes sprite-idle {
-  0%, 100% { transform: translateY(0px) scaleY(1); }
-  40% { transform: translateY(-3px) scaleY(1.02); }
-  60% { transform: translateY(-3px) scaleY(1.02); }
+/* ゴリラ（stage 1-5）：ナックルウォーク＋胸叩き */
+@keyframes anim-gorilla {
+  0%         { transform: translateY(0px)  rotate(0deg)    scaleX(1)    scaleY(1); }
+  10%        { transform: translateY(-5px) rotate(-2.5deg) scaleX(0.97) scaleY(1.03); }
+  22%        { transform: translateY(0px)  rotate(0deg)    scaleX(1)    scaleY(1); }
+  32%        { transform: translateY(-5px) rotate(2.5deg)  scaleX(0.97) scaleY(1.03); }
+  44%        { transform: translateY(0px)  rotate(0deg)    scaleX(1)    scaleY(1); }
+  /* 胸叩き */
+  50%        { transform: translateY(-2px) rotate(0deg)    scaleX(1.13) scaleY(0.89); }
+  56%        { transform: translateY(-2px) rotate(0deg)    scaleX(0.91) scaleY(1.09); }
+  62%        { transform: translateY(-2px) rotate(0deg)    scaleX(1.13) scaleY(0.89); }
+  68%        { transform: translateY(-2px) rotate(0deg)    scaleX(0.91) scaleY(1.09); }
+  75%        { transform: translateY(0px)  rotate(0deg)    scaleX(1)    scaleY(1); }
+  /* 息継ぎ */
+  88%        { transform: translateY(-2px) rotate(-1deg)   scaleX(1)    scaleY(1); }
+  100%       { transform: translateY(0px)  rotate(0deg)    scaleX(1)    scaleY(1); }
 }
 
-@keyframes sprite-dead {
-  0%, 100% { transform: rotate(-4deg) translateY(2px); }
-  50% { transform: rotate(4deg) translateY(2px); }
+/* シルバーバック（stage 6-7）：重く力強い動き＋大きな胸叩き */
+@keyframes anim-silverback {
+  0%         { transform: translateY(0px)  rotate(0deg)    scaleX(1)    scaleY(1); }
+  10%        { transform: translateY(-7px) rotate(-3deg)   scaleX(0.95) scaleY(1.04); }
+  22%        { transform: translateY(0px)  rotate(0deg)    scaleX(1)    scaleY(1); }
+  32%        { transform: translateY(-7px) rotate(3deg)    scaleX(0.95) scaleY(1.04); }
+  44%        { transform: translateY(0px)  rotate(0deg)    scaleX(1)    scaleY(1); }
+  /* 大胸叩き */
+  50%        { transform: translateY(-3px) rotate(0deg)    scaleX(1.18) scaleY(0.85); }
+  57%        { transform: translateY(-3px) rotate(0deg)    scaleX(0.88) scaleY(1.12); }
+  64%        { transform: translateY(-3px) rotate(0deg)    scaleX(1.18) scaleY(0.85); }
+  71%        { transform: translateY(-3px) rotate(0deg)    scaleX(0.88) scaleY(1.12); }
+  78%        { transform: translateY(-3px) rotate(0deg)    scaleX(1.18) scaleY(0.85); }
+  85%        { transform: translateY(0px)  rotate(0deg)    scaleX(1)    scaleY(1); }
+  93%        { transform: translateY(-2px) rotate(-1deg)   scaleX(1)    scaleY(1); }
+  100%       { transform: translateY(0px)  rotate(0deg)    scaleX(1)    scaleY(1); }
 }
 
-.sprite-egg  { animation: sprite-float 2s ease-in-out infinite; }
-.sprite-idle { animation: sprite-idle 2.5s ease-in-out infinite; transform-origin: bottom center; }
-.sprite-dead { animation: sprite-dead 4s ease-in-out infinite; transform-origin: bottom center; }
+/* 死亡：ぐったりとした揺れ */
+@keyframes anim-dead {
+  0%         { transform: rotate(-7deg) translateY(5px) scaleX(0.97); }
+  30%        { transform: rotate(7deg)  translateY(4px) scaleX(1.03); }
+  60%        { transform: rotate(-5deg) translateY(5px) scaleX(0.98); }
+  100%       { transform: rotate(-7deg) translateY(5px) scaleX(0.97); }
+}
+
+.sprite-egg         { animation: anim-egg        3.2s ease-in-out infinite; transform-origin: bottom center; }
+.sprite-gorilla     { animation: anim-gorilla     5.0s ease-in-out infinite; transform-origin: bottom center; }
+.sprite-silverback  { animation: anim-silverback  6.5s ease-in-out infinite; transform-origin: bottom center; }
+.sprite-dead        { animation: anim-dead        5.5s ease-in-out infinite; transform-origin: bottom center; }
