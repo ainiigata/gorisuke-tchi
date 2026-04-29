@@ -132,6 +132,7 @@ export function MainPage() {
               retiredAt: null,
             })
             setNameInput('')
+            retireGorilla()
           }}
         >
           図鑑に登録して次の世代へ
